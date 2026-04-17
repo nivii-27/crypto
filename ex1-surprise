@@ -1,0 +1,22 @@
+import numpy as np
+
+def encrypt_hill(plain_text, key_matrix):
+    plain_text = plain_text.upper().replace(" ", "")
+    
+    if len(plain_text) % 2 != 0:
+        plain_text += "X"
+
+    cipher_text = ""
+    for i in range(0, len(plain_text), 2):
+        block = [ord(c) - ord('A') for c in plain_text[i:i+2]]
+        res = np.dot(key_matrix, block) % 26
+        cipher_text += "".join(chr(int(r) + ord('A')) for r in res)
+    
+    return cipher_text
+
+key = np.array([[3, 3], [2, 5]])
+message = "HELP"
+encrypted_msg = encrypt_hill(message, key)
+
+print(f"Plaintext: {message}")
+print(f"Ciphertext: {encrypted_msg}")
