@@ -1,0 +1,23 @@
+import hashlib
+
+def demonstrate_avalanche():
+    # Two strings differing by only one character ('!' vs '.')
+    string1 = "The package will arrive at noon!"
+    string2 = "The package will arrive at noon."
+
+    # Generate SHA-256 hashes
+    hash1 = hashlib.sha256(string1.encode()).hexdigest()
+    hash2 = hashlib.sha256(string2.encode()).hexdigest()
+
+    print(f"Input 1: {string1}")
+    print(f"Hash 1 : {hash1}\n")
+    
+    print(f"Input 2: {string2}")
+    print(f"Hash 2 : {hash2}\n")
+
+    # Count how many characters differ between the two hex strings
+    differences = sum(1 for a, b in zip(hash1, hash2) if a != b)
+    print(f"Number of hex characters that changed: {differences} out of 64")
+
+if __name__ == "__main__":
+    demonstrate_avalanche()
