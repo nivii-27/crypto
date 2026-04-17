@@ -1,0 +1,23 @@
+def left_shift(data):
+    res = bytearray(16)
+    overflow = 0
+    for i in range(15, -1, -1):
+        res[i] = ((data[i] << 1) | overflow) & 0xFF
+        overflow = (data[i] & 0x80) >> 7
+    return bytes(res), overflow
+
+def generate_subkeys(key_zero_encrypt):
+    const_rb = 0x87
+    k1, overflow = left_shift(key_zero_encrypt)
+    if overflow:
+        k1 = bytes(a ^ b for a, b in zip(k1, b'\x00'*15 + bytes([const_rb])))
+    
+    k2, overflow = left_shift(k1)
+    if overflow:
+        k2 = bytes(a ^ b for a, b in zip(k2, b'\x00'*15 + bytes([const_rb])))
+    return k1, k2
+
+mock_encrypted_zero = b'\x2b\x7e\x15\x16\x28\xae\xd2\xa6\xab\xf7\x15\x88\x09\xcf\x4f\x3c'
+k1, k2 = generate_subkeys(mock_encrypted_zero)
+print(f"CMAC K1: {k1.hex()}")
+print(f"CMAC K2: {k2.hex()}")
