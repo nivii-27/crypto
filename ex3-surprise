@@ -1,0 +1,29 @@
+def calculate_dh():
+    q = 23
+    alpha = 5
+    
+    xa = 4
+    ya = (alpha ** xa) % q
+
+    yb = 19
+    
+    ka = (yb ** xa) % q
+    kb = (ya ** xb) % q
+    
+    print(f"--- Standard DH ---")
+    print(f"Alice's Private Key: {xa}")
+    print(f"Bob's Public Value: {yb}")
+    print(f"Shared Secret (K): {ka}")
+    print(f"\n--- MITM Attack ---")
+    xd = 7  # Darth's own private key
+    yd = (alpha ** xd) % q # Darth's public value sent to both
+    
+    k_alice_darth = (yd ** xa) % q
+    k_bob_darth = (yb ** xd) % q
+    
+    print(f"Darth intercepts messages and sends YD: {yd}")
+    print(f"Key between Alice and Darth: {k_alice_darth}")
+    print(f"Key between Bob and Darth: {k_bob_darth}")
+    print("Darth can now decrypt Alice's message, read it, and re-encrypt it for Bob.")
+
+calculate_dh()
